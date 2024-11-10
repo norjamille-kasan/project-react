@@ -8,6 +8,9 @@ type Props = {
 };
 
 export default function SimplePagination({ ...props }: Props) {
+    if (!props.prevUrl && !props.nextUrl) {
+        return null;
+    }
     return (
         <div className=" flex w-full justify-end space-x-2 items-center">
             <Button

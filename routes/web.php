@@ -23,6 +23,7 @@ Route::middleware(['auth','team_resolver'])->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
     Route::resource('projects',\App\Http\Controllers\ProjectController::class);
+    Route::resource('projects.tasks',\App\Http\Controllers\ProjectTaskController::class);
 });
 
 require __DIR__.'/auth.php';

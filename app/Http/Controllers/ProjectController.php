@@ -11,10 +11,10 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Project/Index',[
-            'projects'=> fn() => Project::latest()->simplePaginate(16)->withQueryString()
+        return Inertia::render('Project/Index', [
+            'projects' => fn () => Project::latest()->simplePaginate(16)->withQueryString(),
         ]);
     }
 
@@ -23,7 +23,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Project/Create');
     }
 
     /**
@@ -32,13 +32,14 @@ class ProjectController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>['required']
+            'name' => ['required'],
         ]);
         $request->user()->authored_projects()->create([
-            'name'=> $request->name,
-            'team_id'=> session('scope_team_id'),
+            'name' => $request->name,
+            'team_id' => session('scope_team_id'),
         ]);
-        return back();
+
+        return to_route('projects.index');
     }
 
     /**
@@ -52,24 +53,36 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        //
+        return Inertia::render('Project/Edit', [
+            'project' => $project,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Project $project)
     {
-        //
+        $project->update($request->validate([
+            'name' => ['required'],
+        ]));
+
+        return back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Project $project)
     {
-        //
+       if(auth()->user()->cannot("delete",$project)){
+            abort(403);
+       }
+
+       $project->delete();
+
+       return back();
     }
 }

@@ -36,3 +36,20 @@ export type Project = {
     name: string;
     status: "active" | string;
 };
+
+export type TaskStatusType =
+    | "triage"
+    | "backlog"
+    | "todo"
+    | "in_progress"
+    | "done"
+    | "cancelled";
+
+export type ProjectLabel = {
+    id: number;
+    created_at: string | null;
+    updated_at: string | null;
+    project_id?: number | null;
+    name: string;
+    color: string;
+};

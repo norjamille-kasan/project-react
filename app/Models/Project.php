@@ -10,6 +10,16 @@ class Project extends Model
 
     public function author()
     {
-        return $this->belongsTo(User::class,'author_id');
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function project_labels()
+    {
+        return $this->hasMany(ProjectLabel::class);
     }
 }

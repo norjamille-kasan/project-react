@@ -1,11 +1,17 @@
 import AppContent from "@/Components/AppContent";
 import { BreadcrumbItem, BreadcrumbPage } from "@/Components/ui/breadcrumb";
-import { Button } from "@/Components/ui/button";
+import { Button, buttonVariants } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Separator } from "@/Components/ui/separator";
 import AppLayout from "@/Layouts/AppLayout";
-import { Head, Link, router, useForm, usePage } from "@inertiajs/react";
-import { ArrowLeft, ArrowRight, ListTodo, PlusIcon } from "lucide-react";
+import { Head, Link, router, useForm } from "@inertiajs/react";
+import {
+    CogIcon,
+    Edit2Icon,
+    ListTodo,
+    PlusIcon,
+    TrashIcon,
+} from "lucide-react";
 import { FormEventHandler, ReactNode, useState } from "react";
 import {
     Card,
@@ -28,103 +34,29 @@ import InputError from "@/Components/InputError";
 import { PageProps } from "@/types";
 import { Paginated, Project } from "@/types/models";
 import SimplePagination from "@/Components/SimplePagination";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/Components/ui/dropdown-menu";
 
-const CreateProjectModal = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const { data, setData, processing, errors, post, reset } = useForm({
-        name: "",
-    });
+const ProjectIndex = ({ projects }: { projects: Paginated<Project> }) => {
+    const [deletable, setDeletable] = useState<Project | null>(null);
+    const [deleting, setDeleting] = useState(false);
+    const [deleteInput, setDeleteInput] = useState("");
 
-    const handleSubmit: FormEventHandler = (e) => {
-        e.preventDefault();
-        post(route("projects.store"), {
-            async: true,
+    const handleDeleteProject = () => {
+        router.delete(route("projects.destroy", { project: deletable?.id }), {
             onSuccess() {
-                setIsOpen(false);
-                reset();
+                setDeletable(null);
+                setDeleting(false);
+                setDeleteInput("");
             },
         });
     };
-
-    return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-                <Button>
-                    <PlusIcon className="h-4 w-4" />
-                    New Project
-                </Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Add Project</DialogTitle>
-                    <DialogDescription>
-                        Click save when you're done
-                    </DialogDescription>
-                </DialogHeader>
-                <form id="form" onSubmit={handleSubmit}>
-                    <div className="space-y-1">
-                        <Label htmlFor="name">Name</Label>
-                        <Input
-                            type="text"
-                            value={data.name}
-                            onChange={(e) => setData("name", e.target.value)}
-                            placeholder="ex. Project A"
-                        />
-                        <InputError message={errors.name} />
-                    </div>
-                </form>
-                <DialogFooter>
-                    <Button type="submit" form="form" disabled={processing}>
-                        Create Project
-                    </Button>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
-    );
-};
-
-const ProjectList = () => {
-    const { projects } = usePage<
-        PageProps<{
-            projects: Paginated<Project>;
-        }>
-    >().props;
-
-    return (
-        <div>
-            <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-                {projects.data.map((project) => (
-                    <Card key={project.id}>
-                        <CardHeader>
-                            <div className="flex items-center">
-                                <CardTitle>{project.name}</CardTitle>
-                                <img
-                                    src={`https://api.dicebear.com/9.x/identicon/svg?seed=${project.name}`}
-                                    className="size-7 ml-auto -my-2"
-                                />
-                            </div>
-                            <CardDescription>11 maintainers</CardDescription>
-                        </CardHeader>
-                        <CardFooter>
-                            <Button variant="secondary">
-                                <ListTodo className="h-4 w-4" />
-                                View Tasks
-                            </Button>
-                        </CardFooter>
-                    </Card>
-                ))}
-            </div>
-            <div className="mt-4">
-                <SimplePagination
-                    prevUrl={projects.prev_page_url}
-                    nextUrl={projects.next_page_url}
-                />
-            </div>
-        </div>
-    );
-};
-
-const ProjectIndex = () => {
     return (
         <AppContent
             breadcrumbs={
@@ -145,9 +77,119 @@ const ProjectIndex = () => {
             <div className="flex space-x-2 items-center">
                 <Input className="sm:w-80" type="search" />
                 <Separator orientation="vertical" />
-                <CreateProjectModal />
+                <Link
+                    href={route("projects.create")}
+                    className={buttonVariants({})}
+                >
+                    <PlusIcon />
+                    New Project
+                </Link>
             </div>
-            <ProjectList />
+            <div>
+                <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+                    {projects.data.map((project) => (
+                        <Card key={project.id}>
+                            <CardHeader>
+                                <div className="flex items-center">
+                                    <CardTitle>{project.name}</CardTitle>
+                                    <img
+                                        src={`https://api.dicebear.com/9.x/identicon/svg?seed=${project.name}`}
+                                        className="size-7 ml-auto -my-2"
+                                    />
+                                </div>
+                                <CardDescription>
+                                    11 maintainers
+                                </CardDescription>
+                            </CardHeader>
+                            <CardFooter>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="mr-1"
+                                        >
+                                            <CogIcon />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="start">
+                                        <DropdownMenuItem asChild>
+                                            <Link
+                                                href={route("projects.edit", {
+                                                    project: project.id,
+                                                })}
+                                                preserveScroll
+                                            >
+                                                <Edit2Icon />
+                                                Edit
+                                            </Link>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => {
+                                                setDeletable(project);
+                                                setDeleting(true);
+                                            }}
+                                        >
+                                            <TrashIcon />
+                                            Delete
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                                <Link
+                                    href={route("projects.tasks.index", {
+                                        project: project.id,
+                                    })}
+                                    className={buttonVariants({
+                                        variant: "secondary",
+                                    })}
+                                >
+                                    <ListTodo className="h-4 w-4" />
+                                    View Tasks
+                                </Link>
+                            </CardFooter>
+                        </Card>
+                    ))}
+                </div>
+                <div className="mt-4">
+                    <SimplePagination
+                        prevUrl={projects.prev_page_url}
+                        nextUrl={projects.next_page_url}
+                    />
+                </div>
+            </div>
+            <Dialog open={deleting} onOpenChange={setDeleting}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                        <DialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete this project with the task and remove your
+                            data from our servers.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-1">
+                        <Label htmlFor="name">
+                            Please enter " {deletable?.name} " to continue
+                        </Label>
+                        <Input
+                            type="search"
+                            value={deleteInput}
+                            onChange={(e) => setDeleteInput(e.target.value)}
+                            className="bg-muted/40"
+                        />
+                    </div>
+                    <DialogFooter>
+                        <Button
+                            onClick={handleDeleteProject}
+                            disabled={deleteInput !== deletable?.name}
+                            variant="destructive"
+                            className="w-full"
+                        >
+                            I'm sure and continue
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </AppContent>
     );
 };

@@ -61,6 +61,10 @@ class User extends Authenticatable
         return $this->hasMany(Project::class,'author_id');
     }
 
+    public function authored_tasks()
+    {
+        return $this->hasMany(Task::class,'author_id');
+    }
 
     // metods
 
