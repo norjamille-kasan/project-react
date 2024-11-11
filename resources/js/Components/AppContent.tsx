@@ -82,7 +82,7 @@ export default function AppContent({
                     </Breadcrumb>
                 </div>
             </header>
-            <div className="flex flex-1 container flex-col gap-4 p-6 pt-0">
+            <div className="flex flex-1  flex-col w-full  gap-4 p-6 pt-0">
                 {children}
             </div>
         </>

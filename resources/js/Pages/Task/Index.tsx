@@ -56,6 +56,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
+import SimplePagination from "@/Components/SimplePagination";
+import DueDateDisplay from "@/Components/DueDateDisplay";
 
 const TaskCreateModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -276,77 +278,83 @@ const TaskIndex = ({
                 <Separator orientation="vertical" />
                 <TaskCreateModal />
             </div>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Date Start</TableHead>
-                        <TableHead>Due Date</TableHead>
-                        <TableHead className="text-right"></TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {tasks.data.map((task, i) => (
-                        <TableRow key={task.id}>
-                            <TableCell className="font-medium   inline-flex items-center">
-                                <p className=" w-auto">{task.title}</p>
-                                <Badge variant="outline" className="ml-3">
-                                    <div
-                                        style={{
-                                            background: `#${task.project_label.color}`,
-                                        }}
-                                        className={cn(
-                                            "h-3 w-3 rounded-md mr-1"
-                                        )}
-                                    ></div>
-                                    <span>{task.project_label.name}</span>
-                                </Badge>
-                            </TableCell>
-                            <TableCell>
-                                <ColorBadge variant={task.status_color}>
-                                    {task.status_label}
-                                </ColorBadge>
-                            </TableCell>
-                            <TableCell>
-                                {task.date_start
-                                    ? format(task.date_start!, "MMM d YYY")
-                                    : "---"}
-                            </TableCell>
-                            <TableCell>
-                                {task.due_date
-                                    ? format(task.due_date!, "MMM d YYY")
-                                    : "No due date"}
-                            </TableCell>
-                            <TableCell className="text-right pr-4">
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger>
-                                        <EllipsisIcon className="h-4 w-4" />
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuLabel>
-                                            My Account
-                                        </DropdownMenuLabel>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem>
-                                            Profile
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Billing
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Team
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Subscription
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </TableCell>
+            <div className="w-full">
+                <Table>
+                    <TableHeader>
+                        <TableRow className="divide-x">
+                            <TableHead>Title</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Date Start</TableHead>
+                            <TableHead>Due Date</TableHead>
+                            <TableHead className="text-right"></TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                        {tasks.data.map((task, i) => (
+                            <TableRow key={task.id} className="divide-x">
+                                <TableCell className="font-medium   inline-flex items-center">
+                                    <p className=" w-auto">{task.title}</p>
+                                    <Badge variant="outline" className="ml-3">
+                                        <div
+                                            style={{
+                                                background: `#${task.project_label.color}`,
+                                            }}
+                                            className={cn(
+                                                "h-3 w-3 rounded-md mr-1"
+                                            )}
+                                        ></div>
+                                        <span>{task.project_label.name}</span>
+                                    </Badge>
+                                </TableCell>
+                                <TableCell>
+                                    <ColorBadge variant={task.status_color}>
+                                        {task.status_label}
+                                    </ColorBadge>
+                                </TableCell>
+                                <TableCell>
+                                    {task.date_start
+                                        ? format(task.date_start!, "MMM d YYY")
+                                        : "---"}
+                                </TableCell>
+                                <TableCell>
+                                    <DueDateDisplay dueDate={task.due_date} />
+                                </TableCell>
+                                <TableCell className="text-right pr-4">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <EllipsisIcon className="h-4 w-4" />
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuLabel>
+                                                My Account
+                                            </DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem>
+                                                Profile
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                Billing
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                Team
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                Subscription
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+            <div className="mt-4">
+                <SimplePagination
+                    prevUrl={tasks.prev_page_url}
+                    nextUrl={tasks.next_page_url}
+                />
+            </div>
         </AppContent>
     );
 };

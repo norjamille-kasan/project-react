@@ -12,6 +12,7 @@ export type PageProps<
 > = T & {
     auth: {
         user: User;
+        timezone: string;
     };
     teams: {
         list?: UserJoinedTeam[];

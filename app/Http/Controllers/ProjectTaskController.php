@@ -19,7 +19,7 @@ class ProjectTaskController extends Controller
         return Inertia::render('Task/Index',[
             'project'=> $project,
             'project_labels' => fn() => ProjectLabel::get(),
-            'tasks'=> fn () => $project->tasks()->with(['project_label'])->simplePaginate(15)
+            'tasks'=> fn () => $project->tasks()->with(['project_label'])->latest()->simplePaginate(15)
         ]);
     }
 
@@ -44,7 +44,7 @@ class ProjectTaskController extends Controller
             'label_id'=> ['required','exists:project_labels,id'],
             'status'=> ['required'],
             'date_start'=>['nullable','date','before_or_equal:due_date'],
-            'due_date'=>['required','date','after_or_equal:date_start'],
+            'due_date'=>['nullable','date','after_or_equal:date_start'],
         ]);
 
         $request->user()->authored_tasks()->create([
