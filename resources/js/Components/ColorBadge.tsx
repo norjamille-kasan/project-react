@@ -29,6 +29,8 @@ const badgeVariants = cva(
     }
 );
 
+export type ColorBadgeVariant = VariantProps<typeof badgeVariants>["variant"];
+
 export interface ColorBadgeProps
     extends React.HTMLAttributes<HTMLDivElement>,
         VariantProps<typeof badgeVariants> {}

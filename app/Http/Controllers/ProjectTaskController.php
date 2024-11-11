@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectLabel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class ProjectTaskController extends Controller
 {
@@ -18,6 +19,7 @@ class ProjectTaskController extends Controller
         return Inertia::render('Task/Index',[
             'project'=> $project,
             'project_labels' => fn() => ProjectLabel::get(),
+            'tasks'=> fn () => $project->tasks()->with(['project_label'])->simplePaginate(15)
         ]);
     }
 
@@ -34,9 +36,29 @@ class ProjectTaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,Project $project)
     {
-        //
+        $request->validate([
+            'title'=>['required'],
+            'description'=> ['nullable'],
+            'label_id'=> ['required','exists:project_labels,id'],
+            'status'=> ['required'],
+            'date_start'=>['nullable','date','before_or_equal:due_date'],
+            'due_date'=>['required','date','after_or_equal:date_start'],
+        ]);
+
+        $request->user()->authored_tasks()->create([
+            'ref'=> Str::uuid(),
+            'project_id'=> $project->id,
+            'title'=> $request->title,
+            'description'=> $request->description,
+            'project_label_id'=> $request->label_id,
+            'status'=> $request->status,
+            'date_start'=> $request->date_start,
+            'due_date'=> $request->due_date
+        ]);
+
+        return back();
     }
 
     /**

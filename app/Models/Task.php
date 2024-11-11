@@ -2,12 +2,33 @@
 
 namespace App\Models;
 
+use App\Enum\TaskStatus;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 class Task extends Model
 {
     protected $guarded = [];
+    protected $appends = ['status_label','status_color'];
 
+    protected function statusLabel(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->status->label()
+        );
+    }
+
+    protected function statusColor(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->status->color()
+        );
+    }
+    protected function casts(): array
+    {
+        return [
+            'status' => TaskStatus::class,
+        ];
+    }
     public function project()
     {
         return $this->belongsTo(Project::class);
@@ -16,6 +37,11 @@ class Task extends Model
 
     public function author()
     {
-        return $this->belongsTo(User::class,'author_id');
+        return $this->belongsTo(User::class, 'author_id');
+    }
+
+    public function project_label()
+    {
+        return $this->belongsTo(ProjectLabel::class);
     }
 }

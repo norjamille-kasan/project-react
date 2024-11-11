@@ -53,3 +53,19 @@ export type ProjectLabel = {
     name: string;
     color: string;
 };
+
+export type Task = {
+    id: number;
+    created_at: string | null; // Use Date if date parsing is handled
+    updated_at: string | null;
+    project_id: number;
+    author_id: number;
+    ref: string;
+    title: string;
+    description?: string | null;
+    status: string;
+    project_label_id: number;
+    date_start: string | null;
+    date_end: string | null;
+    due_date: string | null;
+};
