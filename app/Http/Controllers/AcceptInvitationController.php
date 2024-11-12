@@ -28,8 +28,6 @@ class AcceptInvitationController extends Controller
                 'status'=> 'accepted'
             ]);
         });
-      
-
         return redirect('/dashboard');
     }
 }

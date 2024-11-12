@@ -14,7 +14,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         return Inertia::render('Project/Index', [
-            'projects' => fn () => Project::latest()->simplePaginate(16)->withQueryString(),
+            'projects' => fn () => Project::currentTeam()->latest()->simplePaginate(16)->withQueryString(),
         ]);
     }
 

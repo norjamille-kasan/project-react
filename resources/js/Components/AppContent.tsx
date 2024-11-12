@@ -9,7 +9,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/Components/ui/breadcrumb";
-import { usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import { UserJoinedTeam } from "@/types/models";
 import {
     DropdownMenu,
@@ -57,12 +57,21 @@ export default function AppContent({
                                     {teams.list?.map((team, index) => (
                                         <DropdownMenuItem
                                             key={team.name}
-                                            className="gap-2 p-2"
+                                            asChild
                                         >
-                                            {team.name}
-                                            {team.pivot.is_selected && (
-                                                <CheckIcon className="h-4 w-4 ml-auto text-primary" />
-                                            )}
+                                            <Link
+                                                href={route(
+                                                    "current-team.update",
+                                                    { team }
+                                                )}
+                                                method="put"
+                                                className="gap-2 p-2 w-full"
+                                            >
+                                                {team.name}
+                                                {team.pivot.is_selected && (
+                                                    <CheckIcon className="h-4 w-4 ml-auto text-primary" />
+                                                )}
+                                            </Link>
                                         </DropdownMenuItem>
                                     ))}
                                     <DropdownMenuSeparator />

@@ -37,6 +37,7 @@ Route::middleware(['auth','verified','team_resolver'])->group(function () {
     Route::get('/accept-invitation/{token}',\App\Http\Controllers\AcceptInvitationController::class);
     // INVITATION END
 
+    Route::put('/current-team/{team}',\App\Http\Controllers\SwitchTeamController::class)->name('current-team.update');
 });
 
 
