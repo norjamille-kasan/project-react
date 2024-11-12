@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('title');
             $table->longText('description')->nullable();
             $table->string('status');
+            $table->string('priority_level');
             $table->foreignId('project_label_id')->references('id')->on('project_labels');
             $table->timestamp('date_start')->nullable();
             $table->timestamp('date_end')->nullable();

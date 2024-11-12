@@ -43,7 +43,7 @@ class RegisteredUserController extends Controller
         ]);
 
         $defaultTeam = $user->owned_teams()->create([
-            'name'=> "Prodesk's Default"
+            'name'=> "{$user->name}' Team"
         ]);
 
         $user->joined_teams()->attach($defaultTeam->id,['is_selected'=>true]);

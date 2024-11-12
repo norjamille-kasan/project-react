@@ -1,3 +1,5 @@
+import { TaskPriorityLevel } from "@/lib/enums";
+
 type Paginated<T> = {
     current_page: number;
     data: T[];
@@ -68,4 +70,7 @@ export type Task = {
     date_start: string | null;
     date_end: string | null;
     due_date: string | null;
+    status_color: ColorBadgeVariant;
+    status_label: string;
+    priority_level: TaskPriorityLevel;
 };

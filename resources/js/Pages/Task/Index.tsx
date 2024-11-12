@@ -32,7 +32,13 @@ import {
 } from "@/Components/ui/table";
 import { Badge } from "@/Components/ui/badge";
 import { ColorBadge, ColorBadgeVariant } from "@/Components/ColorBadge";
-import { EllipsisIcon, PlusIcon } from "lucide-react";
+import {
+    CogIcon,
+    EllipsisIcon,
+    PlusIcon,
+    User2Icon,
+    UserPlus2,
+} from "lucide-react";
 import { Label } from "@/Components/ui/label";
 import { Textarea } from "@/Components/ui/textarea";
 import { PageProps } from "@/types";
@@ -58,6 +64,7 @@ import {
 } from "@/Components/ui/dropdown-menu";
 import SimplePagination from "@/Components/SimplePagination";
 import DueDateDisplay from "@/Components/DueDateDisplay";
+import { TaskPriorityLevel } from "@/lib/enums";
 
 const TaskCreateModal = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -95,6 +102,7 @@ const TaskCreateForm = ({ taskCreated }: { taskCreated: () => void }) => {
         status: "todo",
         date_start: "",
         due_date: "",
+        priority_level: "low",
     });
 
     const handleSubmit: FormEventHandler = (e) => {
@@ -228,6 +236,28 @@ const TaskCreateForm = ({ taskCreated }: { taskCreated: () => void }) => {
                         </Select>
                         <InputError message={errors.status} />
                     </div>
+                    <div className="space-y-1 sm:col-span-1">
+                        <Select
+                            value={data.priority_level}
+                            onValueChange={(e) => setData("priority_level", e)}
+                        >
+                            <SelectTrigger>
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="low">
+                                    Low Priority
+                                </SelectItem>
+                                <SelectItem value="mid">
+                                    Mid Priority
+                                </SelectItem>
+                                <SelectItem value="high">
+                                    High Priority
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <InputError message={errors.priority_level} />
+                    </div>
                 </div>
                 <DialogFooter className="mt-4">
                     <Button type="submit">Create Task</Button>
@@ -242,13 +272,7 @@ const TaskIndex = ({
     tasks,
 }: {
     project: Project;
-    tasks: Paginated<
-        Task & {
-            project_label: ProjectLabel;
-            status_color: ColorBadgeVariant;
-            status_label: string;
-        }
-    >;
+    tasks: Paginated<Task & { project_label: ProjectLabel }>;
 }) => {
     return (
         <AppContent
@@ -276,6 +300,12 @@ const TaskIndex = ({
             <div className="flex space-x-2 items-center">
                 <Input className="sm:w-80" type="search" />
                 <Separator orientation="vertical" />
+                <Button variant="outline" size="icon">
+                    <CogIcon />
+                </Button>
+                <Button variant="outline" size="icon">
+                    <UserPlus2 />
+                </Button>
                 <TaskCreateModal />
             </div>
             <div className="w-full">
@@ -283,10 +313,13 @@ const TaskIndex = ({
                     <TableHeader>
                         <TableRow className="divide-x">
                             <TableHead>Title</TableHead>
-                            <TableHead>Status</TableHead>
+                            <TableHead className="w-[100px]">Status</TableHead>
                             <TableHead>Date Start</TableHead>
                             <TableHead>Due Date</TableHead>
-                            <TableHead className="text-right"></TableHead>
+                            <TableHead className="w-[120px]">
+                                Priority Level
+                            </TableHead>
+                            <TableHead className="text-right w-[50px]"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -307,7 +340,10 @@ const TaskIndex = ({
                                     </Badge>
                                 </TableCell>
                                 <TableCell>
-                                    <ColorBadge variant={task.status_color}>
+                                    <ColorBadge
+                                        variant={task.status_color}
+                                        className="w-full justify-center text-center"
+                                    >
                                         {task.status_label}
                                     </ColorBadge>
                                 </TableCell>
@@ -319,12 +355,32 @@ const TaskIndex = ({
                                 <TableCell>
                                     <DueDateDisplay dueDate={task.due_date} />
                                 </TableCell>
+                                <TableCell>
+                                    <span
+                                        className={cn(
+                                            "uppercase text-xs font-bold",
+                                            {
+                                                "text-red-600":
+                                                    task.priority_level ===
+                                                    TaskPriorityLevel.HIGH,
+                                                "text-yellow-600":
+                                                    task.priority_level ===
+                                                    TaskPriorityLevel.MID,
+                                                "text-muted-foreground":
+                                                    task.priority_level ===
+                                                    TaskPriorityLevel.LOW,
+                                            }
+                                        )}
+                                    >
+                                        {task.priority_level}
+                                    </span>
+                                </TableCell>
                                 <TableCell className="text-right pr-4">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
                                             <EllipsisIcon className="h-4 w-4" />
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
+                                        <DropdownMenuContent className="mr-5">
                                             <DropdownMenuLabel>
                                                 My Account
                                             </DropdownMenuLabel>

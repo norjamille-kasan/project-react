@@ -15,7 +15,7 @@ Route::get('/', function () {
 });
 
 
-Route::middleware(['auth','team_resolver'])->group(function () {
+Route::middleware(['auth','verified','team_resolver'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -24,6 +24,21 @@ Route::middleware(['auth','team_resolver'])->group(function () {
     })->name('dashboard');
     Route::resource('projects',\App\Http\Controllers\ProjectController::class);
     Route::resource('projects.tasks',\App\Http\Controllers\ProjectTaskController::class);
+
+    Route::controller(\App\Http\Controllers\TeamMemberController::class)->group(function(){
+        Route::get('/team-members/{team}','index')->name('team-members.index');
+    });
+
+    // INVITATION
+    Route::controller(\App\Http\Controllers\TeamInvitationController::class)->group(function(){
+        Route::post('/team-invitation','store')->name('team-invitation.store');
+    });
+
+    Route::get('/accept-invitation/{token}',\App\Http\Controllers\AcceptInvitationController::class);
+    // INVITATION END
+
 });
+
+
 
 require __DIR__.'/auth.php';

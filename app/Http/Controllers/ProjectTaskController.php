@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Enum\TaskStatus;
 use App\Models\Project;
 use App\Models\ProjectLabel;
+use App\TaskPriorityLevel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class ProjectTaskController extends Controller
 {
@@ -19,7 +21,7 @@ class ProjectTaskController extends Controller
         return Inertia::render('Task/Index',[
             'project'=> $project,
             'project_labels' => fn() => ProjectLabel::get(),
-            'tasks'=> fn () => $project->tasks()->with(['project_label'])->latest()->simplePaginate(15)
+            'tasks'=> fn () => $project->tasks()->with(['project_label'])->latest()->simplePaginate(20)
         ]);
     }
 
@@ -45,6 +47,7 @@ class ProjectTaskController extends Controller
             'status'=> ['required'],
             'date_start'=>['nullable','date','before_or_equal:due_date'],
             'due_date'=>['nullable','date','after_or_equal:date_start'],
+            'priority_level'=> ['required',Rule::enum(TaskPriorityLevel::class)]
         ]);
 
         $request->user()->authored_tasks()->create([
@@ -55,7 +58,8 @@ class ProjectTaskController extends Controller
             'project_label_id'=> $request->label_id,
             'status'=> $request->status,
             'date_start'=> $request->date_start,
-            'due_date'=> $request->due_date
+            'due_date'=> $request->due_date,
+            'priority_level'=> $request->priority_level,
         ]);
 
         return back();

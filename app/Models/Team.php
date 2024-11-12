@@ -15,6 +15,11 @@ class Team extends Model
 
     public function members()
     {
-        return $this->belongsToMany(User::class)->withPivot(['is_selected']);
+        return $this->belongsToMany(User::class)->withPivot(['is_selected','is_active']);
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(TeamInvitation::class);
     }
 }

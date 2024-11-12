@@ -6,8 +6,8 @@ export default function DueDateDisplay({
 }) {
     if (!dueDate) {
         return (
-            <span className="text-muted-foreground text-xs italic">
-                No Due Date
+            <span className="text-muted-foreground ">
+                No Due Date <span className="text-base">😴</span>{" "}
             </span>
         );
     }
@@ -17,14 +17,18 @@ export default function DueDateDisplay({
     }
 
     if (isToday(new Date(dueDate))) {
-        return <span className="text-blue-600">Today</span>;
+        return <p className="text-blue-600">Today</p>;
     }
 
     if (isTomorrow(new Date(dueDate))) {
-        return <span className="text-red-600">Tomorrow</span>;
+        return (
+            <p className="text-red-600">
+                Tomorrow <span className="text-base">😱</span>
+            </p>
+        );
     }
 
     return (
-        <span className="font-semibold">{format(dueDate, "MMM d YYY")}</span>
+        <span className="font-semibold">{format(dueDate, "MMM d yyy")}</span>
     );
 }

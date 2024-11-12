@@ -10,6 +10,7 @@ import {
     PieChart,
     Settings2,
     SquareTerminal,
+    Users2Icon,
 } from "lucide-react";
 
 import { NavMain } from "@/Components/nav-main";
@@ -20,11 +21,16 @@ import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
+    SidebarGroup,
     SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
     SidebarRail,
 } from "@/Components/ui/sidebar";
-import { usePage } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import ApplicationLogo from "./ApplicationLogo";
+import { Separator } from "./ui/separator";
 
 const data = {
     user: {
@@ -156,7 +162,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-    const { url } = usePage();
+    const { url, props: pageProps } = usePage();
 
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -173,7 +179,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {/* <NavProjects projects={data.projects} /> */}
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            isActive={url.startsWith("/team-members")}
+                            tooltip="Team Members"
+                            asChild
+                        >
+                            <Link
+                                href={route("team-members.index", {
+                                    team: pageProps.teams.current?.id,
+                                })}
+                            >
+                                <Users2Icon className="h-4 w-4" />
+                                <span>Team Members</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+                <Separator />
+                <NavUser user={pageProps.auth.user} />
             </SidebarFooter>
             <SidebarRail />
         </Sidebar>

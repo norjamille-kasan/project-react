@@ -23,18 +23,11 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/Components/ui/sidebar";
+import { router } from "@inertiajs/react";
+import { User } from "@/types";
 
-export function NavUser({
-    user,
-}: {
-    user: {
-        name: string;
-        email: string;
-        avatar: string;
-    };
-}) {
+export function NavUser({ user }: { user: User }) {
     const { isMobile } = useSidebar();
-
     return (
         <SidebarMenu>
             <SidebarMenuItem>
@@ -46,7 +39,7 @@ export function NavUser({
                         >
                             <Avatar className="h-8 w-8 rounded-lg">
                                 <AvatarImage
-                                    src={user.avatar}
+                                    src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${user.name}`}
                                     alt={user.name}
                                 />
                                 <AvatarFallback className="rounded-lg">
@@ -74,7 +67,7 @@ export function NavUser({
                             <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <Avatar className="h-8 w-8 rounded-lg">
                                     <AvatarImage
-                                        src={user.avatar}
+                                        src={`https://api.dicebear.com/9.x/thumbs/svg?seed=${user.name}`}
                                         alt={user.name}
                                     />
                                     <AvatarFallback className="rounded-lg">
@@ -114,7 +107,11 @@ export function NavUser({
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() => {
+                                router.post(route("logout"));
+                            }}
+                        >
                             <LogOut />
                             Log out
                         </DropdownMenuItem>

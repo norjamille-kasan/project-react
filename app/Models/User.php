@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -53,7 +53,7 @@ class User extends Authenticatable
 
     public function joined_teams()
     {
-        return $this->belongsToMany(Team::class)->withPivot(['is_selected']);
+        return $this->belongsToMany(Team::class)->withPivot(['is_selected','is_active']);
     }
 
     public function authored_projects()
@@ -66,6 +66,10 @@ class User extends Authenticatable
         return $this->hasMany(Task::class,'author_id');
     }
 
+    public function team_invitations()
+    {
+        return $this->hasMany(TeamInvitation::class);
+    }
     // metods
 
  
