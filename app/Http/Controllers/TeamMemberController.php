@@ -17,11 +17,11 @@ class TeamMemberController extends Controller
 
         return Inertia::render('Member/Index',[
             'team'=> $team,
-            'members'=> fn() => $team->members()->latest()->simplePaginate(20)->through(fn($user)=> [
+            'members'=> fn() => $team->users()->latest()->simplePaginate(20)->through(fn($user)=> [
                 'id'=> $user->id,
                 'name'=> $user->name,
                 'email'=> $user->email,
-                'is_active'=> $user->pivot->is_active
+                'is_active'=>true
             ]),
         ]);
     }
