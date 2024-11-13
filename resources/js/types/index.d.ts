@@ -5,6 +5,7 @@ export interface User {
     name: string;
     email: string;
     email_verified_at?: string;
+    current_team_id?: number;
 }
 
 export type PageProps<

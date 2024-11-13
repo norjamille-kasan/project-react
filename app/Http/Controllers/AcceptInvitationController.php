@@ -5,29 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AcceptInvitationRequest;
 use App\Models\TeamInvitation;
 use Illuminate\Http\Request;
+use Mpociot\Teamwork\Facades\Teamwork;
 
 class AcceptInvitationController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(AcceptInvitationRequest $request,string $token)
+    public function __invoke(Request $request,string $token)
     {
-        $teamInvitation = TeamInvitation::whereToken($token)->firstOrFail();
-
-        $invitedUser = $request->ensureInvitationIsForCurrentUser($teamInvitation->email);
-
-        $request->user()->joined_teams()->updateExistingPivot(session('scope_team_id'),['is_selected'=>false]);
-
-        $request->user()->joined_teams()->attach($teamInvitation->team,['is_selected'=>true]);
-
-        session(['scope_team_id'=> $teamInvitation->team_id]);
-
-        defer(function () use($teamInvitation){
-            return $teamInvitation->update([
-                'status'=> 'accepted'
-            ]);
-        });
+        $invite = Teamwork::getInviteFromAcceptToken( $token ); // Returns a TeamworkInvite model or null
+        abort_unless($invite,404);
+        Teamwork::acceptInvite($invite);
+        auth()->user()->assignRole('Team Member');
         return redirect('/dashboard');
     }
 }

@@ -6,11 +6,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Mpociot\Teamwork\Traits\UserHasTeams;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, UserHasTeams,HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -45,17 +47,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
-
-    public function owned_teams()
-    {
-        return $this->hasMany(Team::class,'owner_id');
-    }
-
-    public function joined_teams()
-    {
-        return $this->belongsToMany(Team::class)->withPivot(['is_selected','is_active']);
-    }
-
     public function authored_projects()
     {
         return $this->hasMany(Project::class,'author_id');
@@ -65,11 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Task::class,'author_id');
     }
-
-    public function team_invitations()
-    {
-        return $this->hasMany(TeamInvitation::class);
-    }
+  
     // metods
 
  

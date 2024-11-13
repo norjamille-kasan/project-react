@@ -68,9 +68,11 @@ export default function AppContent({
                                                 className="gap-2 p-2 w-full"
                                             >
                                                 {team.name}
-                                                {team.pivot.is_selected && (
-                                                    <CheckIcon className="h-4 w-4 ml-auto text-primary" />
-                                                )}
+                                                {teams.current &&
+                                                    team.id ===
+                                                        teams.current.id && (
+                                                        <CheckIcon className="h-4 w-4 ml-auto text-primary" />
+                                                    )}
                                             </Link>
                                         </DropdownMenuItem>
                                     ))}
@@ -91,7 +93,7 @@ export default function AppContent({
                     </Breadcrumb>
                 </div>
             </header>
-            <div className="flex flex-1  flex-col w-full  gap-4 p-6 pt-0">
+            <div className="flex flex-1  flex-col w-full  gap-4 p-6 pt-4">
                 {children}
             </div>
         </>

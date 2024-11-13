@@ -10,13 +10,15 @@
     "require": {
         "php": "^8.2",
         "inertiajs/inertia-laravel": "2.x-dev",
-        "laravel/framework": "^11.30.0",
+        "laravel/framework": "^11.31.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "mpociot/teamwork": "^9.0",
         "spatie/laravel-permission": "^6.10",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.23",
         "laravel/breeze": "^2.2",
         "laravel/pail": "^1.1",

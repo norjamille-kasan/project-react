@@ -11,13 +11,10 @@ class SwitchTeamController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request,Team $team,SwitchTeamAction $action)
+    public function __invoke(Request $request, Team $team)
     {
-        try {
-            $action->handle($team,$request->user());
-            return back();
-        } catch (\Throwable $th) {
-            return back()->with('exception', $th);
-        }
+        $request->user()->switchTeam($team->id);
+        session(['scope_team_id' => $team->id]);
+        return back();
     }
 }

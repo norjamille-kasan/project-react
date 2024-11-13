@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Resources\UserJoinedTeamResource;
 use Closure;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,18 +16,28 @@ class TeamResolver
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session('scope_team_id')) {
-           $selectedTeam = $request->user()->joined_teams()->wherePivot('is_selected',true)->first();
-           session(['scope_team_id'=> $selectedTeam->id]);
-        }
         
+        $this->ensureTeamIsSet();
+        $this->ensureUserTeamsIsShared();
+
+        return $next($request);
+    }
+
+    public function ensureTeamIsSet()
+    {
+        if (!session('scope_team_id')) {
+            session(['scope_team_id'=> auth()->user()->currentTeam->id]);
+         }
+    }
+
+    public function ensureUserTeamsIsShared()
+    {
         Inertia::share('teams',function(){
-            $list = auth()->user()->joined_teams()->get();
+            $list = auth()->user()->teams;
             return [
                 'list'=> $list,
-                'current'=> $list->where('id',session('scope_team_id'))->first(),
+                'current'=> $list->find(session('scope_team_id')),
             ];
         });
-        return $next($request);
     }
 }

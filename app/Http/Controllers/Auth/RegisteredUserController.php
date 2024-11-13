@@ -42,11 +42,7 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $defaultTeam = $user->owned_teams()->create([
-            'name'=> "{$user->name}' Team"
-        ]);
-
-        $user->joined_teams()->attach($defaultTeam->id,['is_selected'=>true]);
+        $user->createOwnedTeam(['name' => "{$user->name}'s Team"]);
 
         event(new Registered($user));
 
