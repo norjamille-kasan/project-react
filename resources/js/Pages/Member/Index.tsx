@@ -4,7 +4,7 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Separator } from "@/Components/ui/separator";
 import AppLayout from "@/Layouts/AppLayout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import { EllipsisIcon, PlusIcon, UserPlus2 } from "lucide-react";
 import { ReactNode } from "react";
 import {
@@ -37,6 +37,8 @@ const MemberIndex = ({
         Pick<User, "email" | "id" | "name"> & { is_active: boolean }
     >;
 }) => {
+    const { teams } = usePage().props;
+
     return (
         <AppContent
             breadcrumbs={
@@ -49,7 +51,12 @@ const MemberIndex = ({
         >
             <Head title="Members" />
             <div>
-                <h1 className="text-xl font-semibold">Members</h1>
+                <div className="flex items-center space-x-2">
+                    <span className="text-xl font-semibold">
+                        {teams.current?.name}
+                    </span>
+                    <h1 className="text-xl font-semibold">Members</h1>
+                </div>
                 <p className="text-sm text-muted-foreground">
                     Manage all your team members
                 </p>

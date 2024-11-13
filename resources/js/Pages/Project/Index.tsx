@@ -86,70 +86,87 @@ const ProjectIndex = ({ projects }: { projects: Paginated<Project> }) => {
                 </Link>
             </div>
             <div>
-                <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-                    {projects.data.map((project) => (
-                        <Card key={project.id}>
-                            <CardHeader>
-                                <div className="flex items-center">
-                                    <CardTitle>{project.name}</CardTitle>
-                                    <img
-                                        src={`https://api.dicebear.com/9.x/identicon/svg?seed=${project.name}`}
-                                        className="size-7 ml-auto -my-2"
-                                    />
-                                </div>
-                                <CardDescription>
-                                    11 maintainers
-                                </CardDescription>
-                            </CardHeader>
-                            <CardFooter>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="mr-1"
-                                        >
-                                            <CogIcon />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="start">
-                                        <DropdownMenuItem asChild>
-                                            <Link
-                                                href={route("projects.edit", {
-                                                    project: project.id,
-                                                })}
-                                                preserveScroll
+                {projects.data.length > 0 ? (
+                    <div className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+                        {projects.data.map((project) => (
+                            <Card key={project.id}>
+                                <CardHeader>
+                                    <div className="flex items-center">
+                                        <CardTitle>{project.name}</CardTitle>
+                                        <img
+                                            src={`https://api.dicebear.com/9.x/identicon/svg?seed=${project.name}`}
+                                            className="size-7 ml-auto -my-2"
+                                        />
+                                    </div>
+                                    <CardDescription>
+                                        11 maintainers
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardFooter>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="mr-1"
                                             >
-                                                <Edit2Icon />
-                                                Edit
-                                            </Link>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => {
-                                                setDeletable(project);
-                                                setDeleting(true);
-                                            }}
-                                        >
-                                            <TrashIcon />
-                                            Delete
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                                <Link
-                                    href={route("projects.tasks.index", {
-                                        project: project.id,
-                                    })}
-                                    className={buttonVariants({
-                                        variant: "secondary",
-                                    })}
-                                >
-                                    <ListTodo className="h-4 w-4" />
-                                    View Tasks
-                                </Link>
-                            </CardFooter>
-                        </Card>
-                    ))}
-                </div>
+                                                <CogIcon />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="start">
+                                            <DropdownMenuItem asChild>
+                                                <Link
+                                                    href={route(
+                                                        "projects.edit",
+                                                        {
+                                                            project: project.id,
+                                                        }
+                                                    )}
+                                                    preserveScroll
+                                                >
+                                                    <Edit2Icon />
+                                                    Edit
+                                                </Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                onClick={() => {
+                                                    setDeletable(project);
+                                                    setDeleting(true);
+                                                }}
+                                            >
+                                                <TrashIcon />
+                                                Delete
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                    <Link
+                                        href={route("projects.tasks.index", {
+                                            project: project.id,
+                                        })}
+                                        className={buttonVariants({
+                                            variant: "secondary",
+                                        })}
+                                    >
+                                        <ListTodo className="h-4 w-4" />
+                                        View Tasks
+                                    </Link>
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="mt-3 w-full h-80 flex items-center justify-center">
+                        <div className="space-y-3">
+                            <h1 className="text-center">No Project Yet</h1>
+                            <Link
+                                href={route("projects.create")}
+                                className={buttonVariants({})}
+                            >
+                                Create Your First Project
+                            </Link>
+                        </div>
+                    </div>
+                )}
                 <div className="mt-4">
                     <SimplePagination
                         prevUrl={projects.prev_page_url}
