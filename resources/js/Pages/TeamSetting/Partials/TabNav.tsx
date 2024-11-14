@@ -42,21 +42,38 @@ export default function TabNav({
                             Information
                         </Link>
                         {currentTeamId && (
-                            <Link
-                                href={route("team-members.index", {
-                                    team: currentTeamId,
-                                })}
-                                prefetch
-                                cacheFor="10s"
-                                className={cn(
-                                    "whitespace-nowrap border-b-2  px-1 py-4 text-sm font-medium ",
-                                    activeUrl === "/team-setting/members"
-                                        ? "border-primary"
-                                        : "border-transparent text-muted-foreground hover:border-secondary hover:text-foreground/80"
-                                )}
-                            >
-                                Members
-                            </Link>
+                            <>
+                                <Link
+                                    href={route("team-members.index", {
+                                        team: currentTeamId,
+                                    })}
+                                    prefetch
+                                    cacheFor="10s"
+                                    className={cn(
+                                        "whitespace-nowrap border-b-2  px-1 py-4 text-sm font-medium ",
+                                        activeUrl === "/team-setting/members"
+                                            ? "border-primary"
+                                            : "border-transparent text-muted-foreground hover:border-secondary hover:text-foreground/80"
+                                    )}
+                                >
+                                    Members
+                                </Link>
+                                <Link
+                                    href={route("team-roles.index", {
+                                        team: currentTeamId,
+                                    })}
+                                    prefetch
+                                    cacheFor="10s"
+                                    className={cn(
+                                        "whitespace-nowrap border-b-2  px-1 py-4 text-sm font-medium ",
+                                        activeUrl === "/team-setting/roles"
+                                            ? "border-primary"
+                                            : "border-transparent text-muted-foreground hover:border-secondary hover:text-foreground/80"
+                                    )}
+                                >
+                                    Roles
+                                </Link>
+                            </>
                         )}
                     </nav>
                 </div>

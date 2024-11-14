@@ -9,8 +9,6 @@ class TeamSettingController extends Controller
 {
     public function index()
     {
-        return Inertia::render('TeamSetting/Index',[
-            'members'=>  
-        ]);
+        return Inertia::render('TeamSetting/Index');
     }
 }

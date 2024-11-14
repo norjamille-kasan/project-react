@@ -31,7 +31,7 @@ export default function InformationTabContent() {
     return (
         <div>
             <form onSubmit={handleSaveChanges}>
-                <Card>
+                <Card className="ring-4 ring-secondary">
                     <CardHeader>
                         <CardTitle>Team Information</CardTitle>
                         <CardDescription></CardDescription>

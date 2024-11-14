@@ -39,6 +39,12 @@ Route::middleware(['auth','verified','team_resolver','team_role_and_permission_r
         Route::get('/team-setting/members/{team}','index')->name('team-members.index');
     });
 
+    Route::controller(\App\Http\Controllers\TeamRoleController::class)->group(function(){
+        Route::get('/team-setting/roles/{team}','index')->name('team-roles.index');
+        Route::post('/team-setting/roles','store')->name('team-roles.store');
+    });
+
+
     // INVITATION
     Route::controller(\App\Http\Controllers\TeamInvitationController::class)->group(function(){
         Route::post('/team-invitation','store')->name('team-invitation.store');

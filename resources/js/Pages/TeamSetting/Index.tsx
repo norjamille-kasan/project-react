@@ -33,16 +33,7 @@ const TeamSettingIndex = () => {
                 activeUrl="/team-setting"
                 currentTeamId={teams.current?.id}
             />
-            <AnimatePresence>
-                <motion.div
-                    variants={SlideUpIn}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                >
-                    <InformationTabContent />
-                </motion.div>
-            </AnimatePresence>
+            <InformationTabContent />
         </AppContent>
     );
 };
