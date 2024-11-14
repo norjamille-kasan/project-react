@@ -3,6 +3,7 @@ import {
     FolderGitIcon,
     HomeIcon,
     User2Icon,
+    UsersRoundIcon,
     type LucideIcon,
 } from "lucide-react";
 
@@ -24,31 +25,19 @@ import {
 import { url } from "inspector";
 import { Link } from "@inertiajs/react";
 
-export function NavMain({ activeUrl }: { activeUrl: string }) {
+export function NavSecondary({ activeUrl }: { activeUrl: string }) {
     return (
         <SidebarGroup>
             <SidebarMenu>
                 <SidebarMenuItem>
                     <SidebarMenuButton
-                        isActive={activeUrl.startsWith("/dashboard")}
-                        tooltip="Dashboard"
+                        isActive={activeUrl.startsWith("/team-setting")}
+                        tooltip="Team"
                         asChild
                     >
-                        <Link href="/dashboard">
-                            <HomeIcon className="h-4 w-4" />
-                            <span>Dashboard</span>
-                        </Link>
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                    <SidebarMenuButton
-                        isActive={activeUrl.startsWith("/projects")}
-                        tooltip="Projects"
-                        asChild
-                    >
-                        <Link href="/projects">
-                            <FolderGitIcon className="h-4 w-4" />
-                            <span>Projects</span>
+                        <Link href="/team-setting">
+                            <UsersRoundIcon className="h-4 w-4" />
+                            <span>Team Setting</span>
                         </Link>
                     </SidebarMenuButton>
                 </SidebarMenuItem>

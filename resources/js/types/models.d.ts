@@ -74,3 +74,21 @@ export type Task = {
     status_label: string;
     priority_level: TaskPriorityLevel;
 };
+
+export type Role = {
+    id: number;
+    team_id?: number | null;
+    name: string;
+    guard_name: string;
+    created_at?: string | null;
+    updated_at?: string | null;
+};
+
+export type Permission = {
+    id: number;
+    name: string;
+    guard_name: string;
+    group?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+};

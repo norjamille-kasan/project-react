@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Role;
 
 class TeamMemberController extends Controller
 {
@@ -15,14 +16,15 @@ class TeamMemberController extends Controller
     {
         abort_unless($team->id, session('scope_team_id'),404);
 
-        return Inertia::render('Member/Index',[
+        return Inertia::render('TeamSetting/Members',[
             'team'=> $team,
-            'members'=> fn() => $team->users()->latest()->simplePaginate(20)->through(fn($user)=> [
+            'members'=> fn() => $team->users()->withPivot('is_active')->latest()->simplePaginate(20)->through(fn($user)=> [
                 'id'=> $user->id,
                 'name'=> $user->name,
                 'email'=> $user->email,
-                'is_active'=>true
+                'is_active' => $user->pivot->is_active
             ]),
+            'roles'=> fn()=> Role::whereTeamId(session(['scope_team_id']))->get()
         ]);
     }
 

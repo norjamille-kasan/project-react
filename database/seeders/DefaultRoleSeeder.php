@@ -13,7 +13,6 @@ class DefaultRoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['name'=> 'Team Member']);
         // project
         Permission::create([
             'name' => 'project:read',

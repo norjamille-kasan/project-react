@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -42,7 +44,9 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $user->createOwnedTeam(['name' => "{$user->name}'s Team"]);
+        $team =  $user->createOwnedTeam(['name' => "{$user->name}'s Team"]);
+
+        session(['scope_team_id'=> $team->id]);
 
         event(new Registered($user));
 
@@ -50,4 +54,5 @@ class RegisteredUserController extends Controller
 
         return redirect(route('dashboard', absolute: false));
     }
+
 }

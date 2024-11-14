@@ -17,7 +17,7 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import InviteMemberModal from "./Partials/InviteMemberModal";
-import { Paginated } from "@/types/models";
+import { Paginated, Role } from "@/types/models";
 import { User } from "@/types";
 import { ColorBadge } from "@/Components/ColorBadge";
 import {
@@ -29,16 +29,17 @@ import {
     DropdownMenuTrigger,
 } from "@/Components/ui/dropdown-menu";
 import SimplePagination from "@/Components/SimplePagination";
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 const MemberIndex = ({
     members,
+    roles,
 }: {
     members: Paginated<
         Pick<User, "email" | "id" | "name"> & { is_active: boolean }
     >;
+    roles: Role[];
 }) => {
     const { teams } = usePage().props;
-
     return (
         <AppContent
             breadcrumbs={
@@ -51,12 +52,7 @@ const MemberIndex = ({
         >
             <Head title="Members" />
             <div>
-                <div className="flex items-center space-x-2">
-                    <span className="text-xl font-semibold">
-                        {teams.current?.name}
-                    </span>
-                    <h1 className="text-xl font-semibold">Members</h1>
-                </div>
+                <h1 className="text-xl font-semibold">Members</h1>
                 <p className="text-sm text-muted-foreground">
                     Manage all your team members
                 </p>
@@ -64,7 +60,7 @@ const MemberIndex = ({
             <div className="flex space-x-2 items-center">
                 <Input className="sm:w-80" type="search" />
                 <Separator orientation="vertical" />
-                <InviteMemberModal />
+                <InviteMemberModal roles={roles} />
             </div>
             <Table>
                 <TableHeader>

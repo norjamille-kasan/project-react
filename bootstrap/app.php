@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'team_resolver'=> \App\Http\Middleware\TeamResolver::class,
+            'team_role_and_permission_resolver'=> \App\Http\Middleware\TeamRolesAndPermissionsResolver::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,

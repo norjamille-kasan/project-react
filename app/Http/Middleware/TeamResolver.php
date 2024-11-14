@@ -16,7 +16,6 @@ class TeamResolver
      */
     public function handle(Request $request, Closure $next): Response
     {
-        
         $this->ensureTeamIsSet();
         $this->ensureUserTeamsIsShared();
 

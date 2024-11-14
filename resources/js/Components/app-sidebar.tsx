@@ -10,6 +10,7 @@ import {
     PieChart,
     Settings2,
     SquareTerminal,
+    User2Icon,
     Users2Icon,
 } from "lucide-react";
 
@@ -22,6 +23,7 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
+    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -31,6 +33,7 @@ import {
 import { Link, usePage } from "@inertiajs/react";
 import ApplicationLogo from "./ApplicationLogo";
 import { Separator } from "./ui/separator";
+import { NavSecondary } from "./nav-secondary";
 
 const data = {
     user: {
@@ -176,14 +179,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarHeader>
             <SidebarContent>
                 <NavMain activeUrl={url} />
-                {/* <NavProjects projects={data.projects} /> */}
+                <NavSecondary activeUrl={url} />
             </SidebarContent>
             <SidebarFooter>
-                <SidebarMenu>
+                {/* <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             isActive={url.startsWith("/team-members")}
-                            tooltip="Team Members"
+                            tooltip="Team"
                             asChild
                         >
                             <Link
@@ -192,12 +195,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                 })}
                             >
                                 <Users2Icon className="h-4 w-4" />
-                                <span>Team Members</span>
+                                <span>Team</span>
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                <Separator />
+                <Separator /> */}
                 <NavUser user={pageProps.auth.user} />
             </SidebarFooter>
             <SidebarRail />
